@@ -1,3 +1,3 @@
 # Projects
 
-A list of python Projects I did while learning the language.
+A list of python Projects I did while learning.
