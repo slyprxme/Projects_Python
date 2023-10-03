@@ -2,7 +2,8 @@ import random
 import string
 
 all = (
-    string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
+    string.ascii_lowercase + string.ascii_uppercase +
+    string.digits + string.punctuation
 )
 
 
