@@ -4,6 +4,8 @@
 # 3. A cell with more than 3 live neighbours dies (overpopulation)
 # 4. A dead cell with exactly 3 live neighbours becomes alive (reproduction)
 # Step 1: Creating a grid
+import random
+
 import pygame
 
 pygame.init()
@@ -25,6 +27,15 @@ CLOCK = pygame.time.Clock
 clock = pygame.time.Clock()
 
 
+def gen(num):
+    return set(
+        [
+            (random.randrange(0, GRID_HEIGHT), random.randrange(0, GRID_WIDTH))
+            for _ in range(num)
+        ]
+    )
+
+
 def draw_grid(positions):
     for position in positions:
         col, row = position
@@ -41,8 +52,34 @@ def draw_grid(positions):
                          (col * TILE_SIZE, HEIGHT))
 
 
+def adjust_grid(positions):
+    all_neighbours = set()
+    new_positions = set()
+
+    for position in positions:
+        neighbours = get_neighbour(position)
+        all_neighbours.update(neighbours)
+
+        neighbours = list(filter(lambda x: x in positions, neighbours))
+
+        if len(neighbours) in [2.3]:
+            new_positions.add(position)
+
+    for position in all_neighbours:
+        neighbours = get_neighbour(position)
+
+        neighbours = list(filter(lambda x: x in positions, neighbours))
+        if len(neighbours) == 3:
+            new_positions.add(position)
+
+
+def get_neighbour(pos):
+    pass
+
+
 def main():
     running = True
+    playing = False
 
     positions = set()
 
@@ -61,10 +98,21 @@ def main():
 
                 pos = (col, row)
 
-                if pos is positions:
+                if pos in positions:
                     positions.remove(pos)
                 else:
                     positions.add(pos)
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    playing = not playing
+
+                if event.key == pygame.K_c:
+                    positions = set()
+                    playing = False
+
+                if event.key == pygame.K_g:
+                    positions = gen(random.randrange(2, 5) * GRID_WIDTH)
 
         screen.fill(gry)
         draw_grid(positions)
